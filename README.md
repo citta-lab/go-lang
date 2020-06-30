@@ -42,6 +42,7 @@ go get github.com/nsf/gocode
 will install `bin` and `src` in golib and keeps the `code` folder clean.
 
 #### 5. Running Go
+As mentioned earlier, the GOPATH by default will look for src folder and we could have just had `first-app` as project inside it, it would work great however the idea of being consistency between source control and the work-space helps. So we will mimic the source control structure so it would be easy to manage. i.e under code > github.com > git_user_name > first-app.
 ```shell
 # First Way: ( generates new executable in the parent src directory )
 go build github.com/citta-lab/first-app  
