@@ -7,6 +7,7 @@
 - Upper case variable name is to allow the variable to be accessed outside of the package.
 - Acronyms should always be upper case. Ex: `var theURL string = 'http://github.com'`. i.e URL
 - In go we can declare a variable in 3 ways. Declare a variable and initialize later, declare and initialize together and lastly colon syntax to initialize without declaring.
+- Go doesn't do implicit conversion and hence we need to use Type conversion.
 
 ## Installation ( Mac ):
 
@@ -120,7 +121,7 @@ Just by defining the variable with upper case we can let the variable to be acce
 
 ### Type Conversion:
 
-If we are interested in type conversion then in go we would be doing like
+If we are interested in type conversion then in go we would be doing like `type (variable)`.
 ```go
 var age int = 12
 var ageFloat float
@@ -151,6 +152,7 @@ func main() {
 }
 ```
 
+## Primitives :
 
 
 
