@@ -6,6 +6,7 @@
 - By design if the variables are declared but not used then go will throw an error at compilation ( in javascript we had to use linter to detect ). i.e it is a compile time error.
 - Upper case variable name is to allow the variable to be accessed outside of the package.
 - Acronyms should always be upper case. Ex: `var theURL string = 'http://github.com'`. i.e URL
+- In go we can declare a variable in 3 ways. Declare a variable and initialize later, declare and initialize together and lastly colon syntax to initialize without declaring.
 
 ## Installation ( Mac ):
 
@@ -128,6 +129,26 @@ ageFloat = float64(age)
 // In Java, it would be like
 double myDouble = 12.3;
 int age = (int) myDouble;
+```
+If we are interested in converting int to a string then we need to use the package `strconv` in go. Below is the example of showing the usecase,
+```go
+import (
+	"fmt"
+	"strconv"
+)
+
+func main() {
+  var age int = 38
+	fmt.Println(age) // prints 38
+
+	var newAge string
+  newAge = string(age)
+	fmt.Println(newAge) // prints & as number 38 is reference to ASCII character &
+
+	var newAgeCon string
+	newAgeCon = strconv.Itoa(age) // pronounced as : string convert into a age
+	fmt.Println(newAgeCon) // prints 38
+}
 ```
 
 
