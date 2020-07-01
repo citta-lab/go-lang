@@ -1,6 +1,13 @@
 # Go Lang
 
-### Installation ( Mac ):
+## Pointers:
+- Similar to javascript lexical scoping go uses the concept of `shadowing` to refer to inner scope variables before reaching out to it's immediate outer scope variable.
+- By default go uses `float64` when variable is defined with floating number. If we need precise floating pointer then it needs to be declared using `var`. Example: `var price float34`.
+- By design if the variables are declared but not used then go will throw an error at compilation ( in javascript we had to use linter to detect ). i.e it is a compile time error.
+- Upper case variable name is to allow the variable to be accessed outside of the package.
+- Acronyms should always be upper case. Ex: `var theURL string = 'http://github.com'`. i.e URL
+
+## Installation ( Mac ):
 
 #### 1. Brew Install
 In this process we will be using `homebrew` and then configure GOPATH in our profile.
@@ -56,8 +63,72 @@ go install github.com/citta-lab/first-app
 bin/first-app
 ```
 
+## Variables :
 
+Three different ways to declare a variables
 
+### Declaring:
+Variable can be declared using the key word `var` by following this format `var name type`.
+```go
+var i int  // declare a variable i of type int
+i = 38 // assigning value
+
+//OR
+
+var i int = 38 // initialize and assign in same line
+
+// OR
+i := 38 // this will make go figure out the type on fly and assigns a value and can only used with in the function
+```
+We could also make use of grouping while declaring variables in the package level, example
+#### (i) Before :
+```go
+var name string = "Bob"
+var age int = 12
+var school string = "MIT"
+```
+
+#### (ii) After :
+```go
+
+var (
+  name string = "Bob"
+  age int = 12
+  school string = "MIT"
+)
+```
+
+### Scoping:
+In go there are three layer of scoping.
+1. Package Level
+2. Block Level
+3. Outside Package Level
+
+```go
+package main
+
+var NAME string  // Can be accessed outside of this main package [ OUTSIDE PACKAGE SCOPE ]
+var age int // Can only be accessed inside of this main package by all functions [ PACKAGE SCOPE ]
+
+func main(){
+  var school string // Can only be accessed with in the function [ BLOCK SCOPE ]
+  var age int // Can only be accessed with in the function [ BLOCK SCOPE ]
+}
+```
+Just by defining the variable with upper case we can let the variable to be accessed outside of the package.
+
+### Type Conversion:
+
+If we are interested in type conversion then in go we would be doing like
+```go
+var age int = 12
+var ageFloat float
+ageFloat = float64(age)
+
+// In Java, it would be like
+double myDouble = 12.3;
+int age = (int) myDouble;
+```
 
 
 
