@@ -15,6 +15,9 @@
 - Strings in go are `alias for bytes` so if we try to extract the index value of string we will get corresponding byte value. Also strings are immutable and need to use double quotes `"value"` instead of `'value'`.
 - By adding * infront of the type we can decalre a pointer. Example `var x *int` declares x as an pointer.
 - We cannot assign values from `int 16` with `int 32` without type conversion becuase the compiler will treat these as different types though they are of int. So we can do var x int32 = int32(y) where y is int16 type initially.
+- By default if an array is not initialized then it will be initialized to `0` in int type array and " " in string type array.
+- `[...]` in go is used to declare the size of array literals. So this [...] will count the number of elements assigned and declares the size instead of us mentioning the size. Example: `var arr [3]int = [3]{ 23, 1, 7}` can be written as `var arr [3]int = [...]{ 23, 1, 7}`. So array literals are nothing but an array with predefined values.
+- Key thing about Arrays in go is `Fixed length` so the compilers knows before hand.
 
 
 
@@ -269,6 +272,24 @@ const (
 )
 ```
 
+### Composite Datatypes:
+#### Arrays:
+Arrays are declared as `var ages [2]int`. So arrays must have defined length. Similary in short hand declaration we can do `ages := [2]int`. Array Literals are nothing but an array with initialized values. So now our example becomes,
+```go
+var ages [2]int = [2]{ 20, 23}
+// alternatively 
+var ages [2]int = [...]{ 20, 23} // [...] validates the size on fly and assigns it
+// alternatively shirt hand
+ages := [...]{20, 23} 
+```
+`range` can be used to loop through the array which returns two properties index and value. for exaple 
+```go
+for i, age range ages {
+	fmt.Println("index %d, age %d", i, age)
+}
+
+```
+
 
 ## Questions:
 1. Hows Go diff from other languages ? 
@@ -282,6 +303,20 @@ const (
 
 3. What is concurency in go ?
 In general, ability of the machine to run the program in parallel but that doesn't mean it runs the program at the time but the core is alive at the same time to handle the task. Go is desgined to handle this concurent programming by means of `primitives`, 'go routines' ( aka threads ), `channels` to communicate between tasks and `select` to enable task synchronization.
+
+4. Example of taking user input ?
+We can make use of `Scan` function from `fmt` package. However keep in mind `Scan` will take only store the user entered value directly into the defined address.
+```go
+package main
+import "fmt"
+func main(){
+	var value string
+	_,err := fmt.Scan(&value) // puts the user input string into `value` variable address
+	fmt.Println(" user entered ", value) // now value can be printed 
+}
+
+
+```
 
 
 
