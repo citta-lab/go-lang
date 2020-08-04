@@ -18,6 +18,7 @@
 - By default if an array is not initialized then it will be initialized to `0` in int type array and " " in string type array.
 - `[...]` in go is used to declare the size of array literals. So this [...] will count the number of elements assigned and declares the size instead of us mentioning the size. Example: `var arr [3]int = [3]{ 23, 1, 7}` can be written as `var arr [3]int = [...]{ 23, 1, 7}`. So array literals are nothing but an array with predefined values.
 - Key thing about Arrays in go is `Fixed length` so the compilers knows before hand.
+- Slices can update the underlying array which it is windowing.	
 
 
 
@@ -273,7 +274,7 @@ const (
 ```
 
 ### Composite Datatypes:
-#### Arrays:
+#### Arrays & Array Literals 
 Arrays are declared as `var ages [2]int`. So arrays must have defined length. Similary in short hand declaration we can do `ages := [2]int`. Array Literals are nothing but an array with initialized values. So now our example becomes,
 ```go
 var ages [2]int = [2]{ 20, 23}
@@ -288,6 +289,78 @@ for i, age range ages {
 	fmt.Println("index %d, age %d", i, age)
 }
 
+```
+
+#### Slice & Slice Literals
+Slcies are subset of an array or `window` of an array. Slice has three properties `pointer` to indicate the start of the slice, `length` number of elements in the slice and lastly `capacity` is maxium size it can hold ( which depends on the underlying array ) 
+```go
+func main() {
+	names := [...]string { "bob", "jay", "matt", "drew" }
+	s1 := names[1:3]
+	fmt.Println(s1) // [ jay, matt ]
+	fmt.Println(len(s1), cap(s1)) // 2 , 3 i.e size, capacity indicating how many more elements slice can have referring to names array
+}
+```
+we can initialize the slice using slice literalys similar to array literals instead we will not infer or define a size. Example:
+```go
+names := []{ "bob", "jay", "matt", "drew" } // is slice literal, notice empty []
+names := [...]string { "bob", "jay", "matt", "drew" } // is array literal, notice [...]
+```
+so most often slice literals are used instead of using an array because of the flexibility. In our slice literal example, slice will be defined with length and capacity of same size and pointer will start at index 0.
+We can make use of `make` to create new slice with size or size and capacity and use `append` to add the item to slice which automatically increases the capacity once it exceeds the underlying array length. Example:
+```go
+func main() {
+	/** Diff ways to make slices using make */
+	var exampleOne = make([]int, 10)
+	fmt.Println(len(exampleOne), cap(exampleOne)) // 10, 10
+
+	var exampleTwo = make([]int, 10, 15)
+	fmt.Println(len(exampleTwo), cap(exampleTwo)) // 10, 15
+
+	exampleTwo = append(exampleTwo, 25, 12, 2, 34, 45, 545)
+	fmt.Println(len(exampleTwo), cap(exampleTwo)) // 16, 30
+}
+```
+
+#### Hash Table & Map
+Will have key/value pair where each key is `unique`. Undeneath the hood 'hash function` is used by go lang to look for value asscoaited with the unique key. This is always `O(1)` lookup. But one thing we need to be aware is "Collision". Example: If two hash keys reference to same slot then there will be a collision.
+
+`Map` is a implementation of Hash Table in go. we can make use of `make` function to create a map. Also can make have two paramters as return so we can get value of the key and true/false on whether the key exist. Example: `value, present := exampleMap["bob"]`. More example below,
+```go
+func main() {
+
+	/* map example */
+	var mapExample map[string]int     // map[key_type] value_type : declaring map
+	mapExample = make(map[string]int) // : making an map
+
+	/* ,map literal example */
+	var mapExmTwo map[string]int
+	mapExmTwo = map[string]int{"bob": 12, "rob": 23, "joe": 10} // initalizing map with values
+
+	fmt.Println(mapExample) // empty map
+	fmt.Println(mapExmTwo)  // map with bob:12 joe:10 rob:23
+
+	/* GET, ADD, UPDATE, DELETE */
+	fmt.Println(mapExmTwo["rob"]) // GET
+	mapExmTwo["sunny"] = 100      // ADD
+	fmt.Println(mapExmTwo)
+	mapExmTwo["sunny"] = 10       // UPDATE
+	fmt.Println(mapExmTwo)
+	delete(mapExmTwo, "sunny")    // DELETE
+	fmt.Println(mapExmTwo)
+}
+```
+#### Struct ( aka Structures )
+Arbitrary data type to hold ogject of any type. Think of like javascript object which can hold anything and `Struct` is a concept taken from C. 
+```go
+type Struct Person {
+	name string // name field 
+	age int // age field 
+	address string // address field 
+}
+
+var p1 Person // p1 will have all the fields defined in Person struct
+var p2 Person 
 ```
 
 
