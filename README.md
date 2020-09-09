@@ -32,6 +32,10 @@
 - By default all the variables, types defined in the package are PRIVATE unless we expose them using a function ( controlled functions )
 - While using `receiver type` it is good practice to stay consistent by using either `call by reference` aka pointer or `call by value`.
 - Go lang doesn't have `Inheritance`.
+- Go lang has built in `concurrency`. If we are running two things at the same time ( same strat and end time ) then it would be called `parallel execution` ( gives better throughput). Concurrent program almost smilimar to parallel execution but their start and end time just over lap rather than the `same` time.
+- Von Neumann Bottleneck : 	Delayed access in memory, Even if we increase the clock rate in machine to run code faster the memory access is still the same ( almost the same )
+- `sync waitGroup` is used to wait other go routines. This is the synchronization aspect in go lang.
+- `Channels` are used to communicate between go routines. `make` command is used to create a channel like `var c := make(chan int)` and can send data on channel by doing `c <- 23` and ` x:= <- c` to receive data from channel.
 
 
 
@@ -748,6 +752,18 @@ func main() {
 }
 ```
 
+### Threads & Go Rotuines :
+Threads were initially called as light weight process and has less context than actual process.	Multiple threads reside inside a Process and also they share some of the context. So goroutines are nothing but a thread, However every process will have one MAIN THREAD and the main thread can have multiple GOROUTINES. 
+      Operating System will talk to the MAIN THREAD. Go Runtime scheduler will talk to MAIN THREAD to distribute the work between multiple GOROUTINES.
+
+Main itself is a go routine and when main ends then all the other go routines orignated from the main are forced to exit. 
+- Go routines exits when they are finished 
+- Go routines are forced to exit when main ends
+
+Because of the `Interleaving` the exution time is unknown and is managed by the go runtine scheduler. To avoid this uncertainity, we can use the package `sync` from go which provides a GLOBAL EVENT context which can be referred by all go routines to execute in synchronization. Similally, `Channels` can be used to communicate between go routines and by default they are unbuffered channels ( unbuffered channel cannot hold data in transit ).
+
+
+
 
 
 
@@ -783,6 +799,8 @@ func main(){
 	fmt.Println(" user entered ", value) // now value can be printed
 }
 ```
+5. Why threads are suppose to be faster than Process ? 
+Though threads are light weight process, unlike process threads inside the process share some of the context between other threads. This helps in quick context switching while running the different process compared to just using the Process ( which has unique context to each other ).
 
 
 
