@@ -36,6 +36,9 @@
 - Von Neumann Bottleneck : 	Delayed access in memory, Even if we increase the clock rate in machine to run code faster the memory access is still the same ( almost the same )
 - `sync waitGroup` is used to wait other go routines. This is the synchronization aspect in go lang.
 - `Channels` are used to communicate between go routines. `make` command is used to create a channel like `var c := make(chan int)` and can send data on channel by doing `c <- 23` and ` x:= <- c` to receive data from channel.
+- `select { .... }` can be used on channel when we only need first returned channel data. `select` can be used with ether send and/or receive.
+- Mutual Exclution ( mutex ) can be used when we want to share data between go routines. This helps preventing `interleaving` at machine level. `Lock()` and `Unlock()` is used to achieve mutex.
+- Initialization in go can be done using `sync.Once` package or just declaring it inside `main` method. Acts like constructor & once.Do() will happens first and only happens once.
 
 
 
@@ -762,6 +765,64 @@ Main itself is a go routine and when main ends then all the other go routines or
 
 Because of the `Interleaving` the exution time is unknown and is managed by the go runtine scheduler. To avoid this uncertainity, we can use the package `sync` from go which provides a GLOBAL EVENT context which can be referred by all go routines to execute in synchronization. Similally, `Channels` can be used to communicate between go routines and by default they are unbuffered channels ( unbuffered channel cannot hold data in transit ).
 
+#### Channel: 
+Example of using two channels to read the data from two different go routine or maybe same go routine. 
+```go
+a := <- c1
+b := <- c2
+result := a + b
+```
+In this case a will wait until it gets the data from `c1` channel and then b does the same before executing addition.
+```go
+select {
+	case a = <- c1;
+		fmt.Println(a)
+	case b = <- c2;
+		fmt.Println(b);
+	default:
+	    fmt.Prinln("nothing happend")
+}
+```
+In this case we would only wait on first data coming in, so if the c2 sends the data first then case a is ignored and vice versa. 	We are blocking on `RECEIVING` data from the channel. We could also do blocking on `SENDING` data to the channel. Example: if we change case b to be more like `case out <- b` then we are blocking until data is sent.
+
+NOTE: In anycase, select will be resolved as soon as one of the case is completed / executed.
+
+#### Initialization 
+Initialization gurantees that it will only be executed once, we could achieve this by adding block of code in `main` function but for more flexibility there is a package called `Once` from sync which will help us to initialize once and blocks other go routines until initialization is done. In below example, we will add Once.Do(). 
+
+Example using WaitGroup package, but go routines #1 and #2 might over lap or interleave due to uncontrolled execution. By adding `Once.Do()` we can initialize the data only ONCE even though two go routines are called on addNum.
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+var wq sync.WaitGroup
+var on sync.Once
+
+func setup(){
+	fmt.Println(" Example initialization ")
+}
+
+func addNum(x int, y int){
+	on.Do(setup)
+	fmt.Println(x+y)
+	wq.Done()
+}
+
+func main(){
+	wq.Add(2)
+	go addNum(2, 12)   // #1
+	go addNum(15, 1)   // #2
+	wq.Wait()
+}
+```
+In this case "Example initialization " will only be printed once.
+
+#### Deadlock 
+Deadlock come from Synchronization, often due to depending go routines on other.
 
 
 
